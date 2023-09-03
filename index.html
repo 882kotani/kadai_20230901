@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #container {
+        width: 100%;
+        height: 100vh;
+        background-color: #ccc;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .video-wrap {
+          z-index: 10;
+          /* position: absolute; */
+          position: relative;
+          .pic {
+            position: absolute;
+            z-index: -99;
+            width: 100%;
+            height: 100%;
+          }
+          .pic_active {
+            position: absolute;
+            z-index: 99;
+            width: 100%;
+            height: 100%;
+          }
+          #video {
+            width: 50%;
+            /* height: 50%; */
+            aspect-ratio: 16 / 9;
+          }
+          .btn-wrap {
+            /* position: absolute; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            gap: 10px;
+          }
+          .current {
+            position: absolute;
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="video-wrap">
+        <img
+          class="pic"
+          src="https://plus1world.com/wp-content/uploads/2011/12/twitter-wadai-photo-0003.png"
+        />
+        <video
+          id="my-video"
+          class="video-js"
+          controls
+          preload="auto"
+          width="640"
+          height="360"
+          data-setup="{}"
+        >
+          <source
+            src="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+            type="application/x-mpegURL"
+          />
+        </video>
+      </div>
+
+      <div class="btn-wrap">
+        <button id="start">開始</button>
+        <button id="stop">停止</button>
+      </div>
+      <div id="current"></div>
+    </div>
+    <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
+    <script>
+      const player = videojs("my-video", {
+        controlBar: {
+          subsCapsButton: false, // サブタイトルボタンを非表示にする
+        },
+      });
+    </script>
+    <script>
+      const video = document.querySelector("video");
+      console.log(video);
+      // startボタンを押した時の処理
+      const start = document.querySelector("#start");
+      const stop = document.querySelector("#stop");
+      const picture = document.querySelector(".pic");
+
+      start.addEventListener("click", () => {
+        video.play();
+      });
+
+      stop.addEventListener("click", () => {
+        console.log("stop", video);
+        video.pause();
+      });
+      // 現在軸を表示する
+      video.addEventListener("timeupdate", () => {
+        const current = document.querySelector("#current");
+        current.textContent = video.currentTime;
+        // console.log(current.textContent);
+        const time_start = 5.0;
+        const time_fin = 10.0;
+
+        if (
+          time_start < current.textContent &&
+          current.textContent < time_fin
+        ) {
+          picture.classList.replace("pic", "pic_active");
+          console.log(current.textContent);
+        }
+        if (time_fin < current.textContent) {
+          picture.classList.replace("pic_active", "pic");
+          console.log(current.textContent);
+        }
+        // if (current.textContent == time_start) {
+        //   picture.classList.toggle("active");
+        // }
+        // if (current.textContent == time_fin) {
+        //   picture.classList.toggle("active");
+        // }
+      });
+    </script>
+  </body>
+</html>
