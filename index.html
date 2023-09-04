@@ -112,13 +112,17 @@
         current.textContent = video.currentTime;
         // console.log(current.textContent);
         const time_start = 5.0;
-        const time_fin = 10.0;
+        const time_fin = 15.0;
 
         if (
           time_start < current.textContent &&
           current.textContent < time_fin
         ) {
           picture.classList.replace("pic", "pic_active");
+          console.log(current.textContent);
+        }
+        if (current.textContent < time_start) {
+          picture.classList.replace("pic_active", "pic");
           console.log(current.textContent);
         }
         if (time_fin < current.textContent) {
